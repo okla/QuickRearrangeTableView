@@ -18,6 +18,6 @@ and ```translucency```
 
 ###Usage###
 
-• After creating ```QuickRearrangeTableView``` object you should pass your view controller to its ```rearrangeDataSource``` property
+• After creating ```QuickRearrangeTableView``` object pass your view controller to its ```rearrangeDataSource``` property
 
 • The view controller should adopt ```QuickRearrangeTableViewDataSource``` protocol

@@ -6,11 +6,11 @@ Long press on a cell to catch it, then move it anywhere you want. Table view scr
 
 ```QuickRearrangeTableView``` has two predefined catch style options: ```hover```
 
-![](https://raw.githubusercontent.com/okla/QuickRearrangeTableView/master/GIFs/Untitled.gif)
+![](https://cloud.githubusercontent.com/assets/8558017/8571784/5d9084f4-2591-11e5-8cc1-9a4011bc41dc.gif)
 
 and ```translucency```
 
-![](https://raw.githubusercontent.com/okla/QuickRearrangeTableView/master/GIFs/Untitled2-3.gif)
+![](https://cloud.githubusercontent.com/assets/8558017/8571783/5d8ff2b4-2591-11e5-8110-ae945c43cccd.gif)
 
 ###Installation###
 

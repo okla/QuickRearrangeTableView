@@ -20,10 +20,7 @@ and ```translucency```
 
 • Make view controller containing your table view adopt ```RearrangeDataSource``` protocol (or use any other object as data source)
 
-• Make your table view class adopt ```Rearrangable``` protocol:
-
-  – Add ```var rearrange: RearrangeProperties!``` to its declaration
-  – Paste its type name to ```extension _: Rearrangable```
+• Make your table view class adopt ```Rearrangable``` protocol: add ```var rearrange: RearrangeProperties!``` to its declaration and paste its type name to ```extension _: Rearrangable```
 
 • Call ```setRearrangeOptions(options: dataSource:)``` and pass options and data source object
 

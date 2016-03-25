@@ -18,8 +18,13 @@ and ```translucency```
 
 ###Usage###
 
-• After creating ```QuickRearrangeTableView``` object pass a data source object to its ```rearrangeDataSource``` property
+• Make view controller containing your table view adopt ```RearrangeDataSource``` protocol (or use any other object as data source)
 
-• Data source object should adopt ```QuickRearrangeTableViewDataSource``` protocol
+• Make your table view class adopt ```Rearrangable``` protocol:
 
-Usage example project included, tested in Xcode 6.4, iOS 8.4 (should work on iOS 7 too)
+  – Add ```var rearrange: RearrangeProperties!``` to its declaration
+  – Paste its type name to ```extension _: Rearrangable```
+
+• Call ```setRearrangeOptions(options: dataSource:)``` and pass options and data source object
+
+Usage example included, tested in Xcode 7.3, iOS 9.3

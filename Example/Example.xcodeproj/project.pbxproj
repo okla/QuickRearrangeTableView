@@ -10,6 +10,7 @@
 		6F2F04B41B45609D007184D3 /* QuickRearrangeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2F04B31B45609D007184D3 /* QuickRearrangeTableView.swift */; };
 		6F3C9B8C1AA07175006360EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3C9B8B1AA07175006360EA /* AppDelegate.swift */; };
 		6F3C9B8E1AA07175006360EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3C9B8D1AA07175006360EA /* ViewController.swift */; };
+		6F4D4ADE1CA579310003E55F /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D4ADD1CA579310003E55F /* TableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +19,7 @@
 		6F3C9B8A1AA07175006360EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F3C9B8B1AA07175006360EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F3C9B8D1AA07175006360EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6F4D4ADD1CA579310003E55F /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +37,7 @@
 			isa = PBXGroup;
 			children = (
 				6F3C9B881AA07175006360EA /* Example */,
+				6F3C9B891AA07175006360EA /* Supporting Files */,
 				6F3C9B871AA07175006360EA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -52,8 +55,8 @@
 			children = (
 				6F3C9B8B1AA07175006360EA /* AppDelegate.swift */,
 				6F2F04B31B45609D007184D3 /* QuickRearrangeTableView.swift */,
+				6F4D4ADD1CA579310003E55F /* TableView.swift */,
 				6F3C9B8D1AA07175006360EA /* ViewController.swift */,
-				6F3C9B891AA07175006360EA /* Supporting Files */,
 			);
 			name = Example;
 			path = App;
@@ -65,6 +68,7 @@
 				6F3C9B8A1AA07175006360EA /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F2F04B41B45609D007184D3 /* QuickRearrangeTableView.swift in Sources */,
+				6F4D4ADE1CA579310003E55F /* TableView.swift in Sources */,
 				6F3C9B8E1AA07175006360EA /* ViewController.swift in Sources */,
 				6F3C9B8C1AA07175006360EA /* AppDelegate.swift in Sources */,
 			);

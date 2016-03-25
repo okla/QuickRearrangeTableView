@@ -1,0 +1,10 @@
+
+*.xcbkptlist
+
+*.xcuserstate
+
+*.xcworkspacedata
+
+*.plist
+
+*.xcscheme

@@ -1,11 +1,11 @@
 import UIKit
 
-class ViewController: UIViewController, QuickRearrangeTableViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
 
   var currentIndexPath: NSIndexPath?
 
-  var cellTitles = ["0x15", "0x2", "0x3", "0x4", "0x5", "0x6", "0x7", "0x8", "0x9", "0xA", "0xB", "0xC",
-    "0xD", "0xE", "0xF", "0x10", "0x11", "0x12", "0x13", "0x14", "0x1"]
+  var cellTitles = ["0x15", "0x2", "0x3", "0x4", "0x5", "0x6", "0x7", "0x8", "0x9", "0xA", "0xB",
+                    "0xC", "0xD", "0xE", "0xF", "0x10", "0x11", "0x12", "0x13", "0x14", "0x1"]
 
   override func prefersStatusBarHidden() -> Bool {
 
@@ -16,31 +16,25 @@ class ViewController: UIViewController, QuickRearrangeTableViewDataSource, UITab
 
     super.viewDidLoad()
 
-    let tableView = QuickRearrangeTableView(frame: view.frame,
-      options: QuickRearrangeTableViewOptions(hover: true, translucency: false))
+    let tableView = TableView(frame: view.frame, style: .Plain)
 
     tableView.delegate = self
     tableView.dataSource = self
-    tableView.rearrangeDataSource = self
-    tableView.separatorInset = UIEdgeInsetsZero
-    tableView.layoutMargins = UIEdgeInsetsZero
-    tableView.backgroundColor = .grayColor()
-
-    tableView.tableFooterView = UIView()
-
-    tableView.rowHeight = tableView.frame.height/10.0
+    tableView.setRearrangeOptions([.hover, .translucency], dataSource: self)
 
     view.addSubview(tableView)
   }
+}
 
-  // MARK: UITableViewDelegate
+extension ViewController: UITableViewDelegate {
 
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
   }
+}
 
-  // MARK: UITableViewDataSource
+extension ViewController: UITableViewDataSource {
 
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
@@ -51,7 +45,7 @@ class ViewController: UIViewController, QuickRearrangeTableViewDataSource, UITab
 
     let cell = UITableViewCell(style: .Default, reuseIdentifier: nil)
 
-    if let unwrappedCurrentIndexPath = currentIndexPath where indexPath == unwrappedCurrentIndexPath {
+    if indexPath == currentIndexPath {
 
       cell.backgroundColor = nil
     }
@@ -62,21 +56,20 @@ class ViewController: UIViewController, QuickRearrangeTableViewDataSource, UITab
 
     cell.separatorInset = UIEdgeInsetsZero
     cell.layoutMargins = UIEdgeInsetsZero
-
+    
     return cell
   }
+}
 
-  // MARK: QuickRearrangeTableViewDataSource
+extension ViewController: RearrangeDataSource {
 
-  func moveObjectAtCurrentIndexPathToIndexPath(indexPath: NSIndexPath) {
+  func moveObjectAtCurrentIndexPath(to indexPath: NSIndexPath) {
 
-    if let unwrappedCurrentIndexPath = currentIndexPath {
+    guard let unwrappedCurrentIndexPath = currentIndexPath else { return }
 
-      let object = cellTitles[unwrappedCurrentIndexPath.row]
+    let object = cellTitles[unwrappedCurrentIndexPath.row]
 
-      cellTitles.removeAtIndex(unwrappedCurrentIndexPath.row)
-
-      cellTitles.insert(object, atIndex: indexPath.row)
-    }
+    cellTitles.removeAtIndex(unwrappedCurrentIndexPath.row)
+    cellTitles.insert(object, atIndex: indexPath.row)
   }
 }

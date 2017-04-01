@@ -2,12 +2,12 @@ import UIKit
 
 protocol RearrangeDataSource: class {
 
-  var currentIndexPath: NSIndexPath? { get set }
+  var currentIndexPath: IndexPath? { get set }
 
-  func moveObjectAtCurrentIndexPath(to indexPath: NSIndexPath)
+  func moveObjectAtCurrentIndexPath(to indexPath: IndexPath)
 }
 
-struct RearrangeOptions: OptionSetType {
+struct RearrangeOptions: OptionSet {
 
   let rawValue: Int
 
@@ -45,14 +45,14 @@ protocol Rearrangable {
 
 extension TableView: Rearrangable {
 
-  func setRearrangeOptions(options: RearrangeOptions, dataSource: RearrangeDataSource) {
+  func setRearrangeOptions(_ options: RearrangeOptions, dataSource: RearrangeDataSource) {
 
     rearrange = RearrangeProperties(options: options, dataSource: dataSource,
                                     recognizer: UILongPressGestureRecognizer(target: self, action: #selector(longPress)),
                                     displayLink: CADisplayLink(target: self, selector: #selector(scrollEvent)))
 
-    rearrange.displayLink.addToRunLoop(.mainRunLoop(), forMode: NSDefaultRunLoopMode)
-    rearrange.displayLink.paused = true
+    rearrange.displayLink.add(to: .main, forMode: RunLoopMode.defaultRunLoopMode)
+    rearrange.displayLink.isPaused = true
 
     addGestureRecognizer(rearrange.recognizer)
   }
@@ -61,10 +61,10 @@ extension TableView: Rearrangable {
 
     contentOffset.y = min(max(0.0, contentOffset.y + rearrange.scrollSpeed), contentSize.height - frame.height)
 
-    moveCatchedViewCenterToY(rearrange.recognizer.locationInView(self).y)
+    moveCatchedViewCenterToY(rearrange.recognizer.location(in: self).y)
   }
 
-  private func moveCatchedViewCenterToY(y: CGFloat) {
+  fileprivate func moveCatchedViewCenterToY(_ y: CGFloat) {
 
     guard let catchedView = rearrange.catchedView else { return }
 
@@ -73,47 +73,46 @@ extension TableView: Rearrangable {
     moveDummyRowIfNeeded()
   }
 
-  private func moveDummyRowIfNeeded() {
+  fileprivate func moveDummyRowIfNeeded() {
 
-    guard let source = rearrange.dataSource, currentIndexPath = source.currentIndexPath,
-      catchedViewCenter = rearrange.catchedView?.center, newIndexPath = indexPathForRowAtPoint(catchedViewCenter)
-      where newIndexPath != currentIndexPath else { return }
+    guard let source = rearrange.dataSource, let currentIndexPath = source.currentIndexPath,
+      let catchedViewCenter = rearrange.catchedView?.center, let newIndexPath = indexPathForRow(at: catchedViewCenter), newIndexPath != currentIndexPath else { return }
 
     source.moveObjectAtCurrentIndexPath(to: newIndexPath)
     source.currentIndexPath = newIndexPath
 
     beginUpdates()
-    deleteRowsAtIndexPaths([currentIndexPath], withRowAnimation: .Top)
-    insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Top)
+    deleteRows(at: [currentIndexPath], with: .top)
+    insertRows(at: [newIndexPath], with: .top)
     endUpdates()
   }
 
   func longPress() {
 
-    guard let source = rearrange.dataSource where !editing else { return }
+    guard let source = rearrange.dataSource, !isEditing else { return }
 
-    let location = rearrange.recognizer.locationInView(self)
+    let location = rearrange.recognizer.location(in: self)
 
     switch rearrange.recognizer.state {
 
-    case .Began:
+    case .began:
 
-      source.currentIndexPath = indexPathForRowAtPoint(location)
+      source.currentIndexPath = indexPathForRow(at: location)
 
       guard let currentIndexPath = source.currentIndexPath,
-        catchedCell = cellForRowAtIndexPath(currentIndexPath) else { return }
+        let catchedCell = cellForRow(at: currentIndexPath) else { return }
 
       allowsSelection = false
 
-      catchedCell.highlighted = false
+      catchedCell.isHighlighted = false
 
-      let sizeWithoutSeparator = CGSizeMake(catchedCell.bounds.size.width, catchedCell.bounds.size.height - 1.0)
+      let sizeWithoutSeparator = CGSize(width: catchedCell.bounds.size.width, height: catchedCell.bounds.size.height - 1.0)
 
       UIGraphicsBeginImageContextWithOptions(sizeWithoutSeparator, true, 0.0)
 
       guard let context = UIGraphicsGetCurrentContext() else { return }
 
-      catchedCell.layer.renderInContext(context)
+      catchedCell.layer.render(in: context)
 
       rearrange.catchedView = UIImageView(image: UIGraphicsGetImageFromCurrentImageContext())
 
@@ -125,24 +124,24 @@ extension TableView: Rearrangable {
 
       rearrange.catchedView!.layer.shadowRadius = 4.0
       rearrange.catchedView!.layer.shadowOpacity = 0.25
-      rearrange.catchedView!.layer.shadowOffset = CGSizeZero
-      rearrange.catchedView!.layer.shadowPath = UIBezierPath(rect: rearrange.catchedView!.bounds).CGPath
+      rearrange.catchedView!.layer.shadowOffset = CGSize.zero
+      rearrange.catchedView!.layer.shadowPath = UIBezierPath(rect: rearrange.catchedView!.bounds).cgPath
 
-      UIView.animateWithDuration(0.2) { [unowned self] in
+      UIView.animate(withDuration: 0.2, animations: { [unowned self] in
 
         if self.rearrange.options.contains(.translucency) { self.rearrange.catchedView!.alpha = 0.5 }
 
         if self.rearrange.options.contains(.hover) {
 
-          self.rearrange.catchedView!.transform = CGAffineTransformMakeScale(1.05, 1.05)
+          self.rearrange.catchedView!.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
         }
 
         self.moveCatchedViewCenterToY(location.y)
-      }
+      }) 
 
-      reloadRowsAtIndexPaths([currentIndexPath], withRowAnimation: .None)
+      reloadRows(at: [currentIndexPath], with: .none)
 
-    case .Changed:
+    case .changed:
 
       guard let catchedView = rearrange.catchedView else { return }
 
@@ -164,42 +163,42 @@ extension TableView: Rearrangable {
           rearrange.scrollSpeed = 5.0*((cellCenterY - frame.height)/halfCellHeight + 1.1)
         }
 
-        rearrange.displayLink.paused = rearrange.scrollSpeed == 0.0
+        rearrange.displayLink.isPaused = rearrange.scrollSpeed == 0.0
       }
 
     default:
 
       allowsSelection = true
 
-      rearrange.displayLink.paused = true
+      rearrange.displayLink.isPaused = true
 
-      guard let currentIndexPath = source.currentIndexPath, catchedView = rearrange.catchedView else { return }
+      guard let currentIndexPath = source.currentIndexPath, let catchedView = rearrange.catchedView else { return }
 
       source.currentIndexPath = nil
 
-      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+      UIView.animate(withDuration: 0.2, animations: { [unowned self] in
 
         if self.rearrange.options.contains(.translucency) { catchedView.alpha = 1.0 }
-        if self.rearrange.options.contains(.hover) { catchedView.transform = CGAffineTransformIdentity }
+        if self.rearrange.options.contains(.hover) { catchedView.transform = CGAffineTransform.identity }
 
-        catchedView.frame = self.rectForRowAtIndexPath(currentIndexPath)
+        catchedView.frame = self.rectForRow(at: currentIndexPath)
 
-      }) { [unowned self] _ in
+      }, completion: { [unowned self] _ in
 
         catchedView.layer.shadowOpacity = 0.0
         
-        UIView.animateWithDuration(0.1, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
           
           self.reloadData()
-          self.layer.addAnimation(CATransition(), forKey: "reload")
+          self.layer.add(CATransition(), forKey: "reload")
           
-        }) { _ in
+        }, completion: { _ in
           
           catchedView.removeFromSuperview()
           
           self.rearrange.catchedView = nil
-        }
-      }
+        }) 
+      }) 
     }
   }
 }

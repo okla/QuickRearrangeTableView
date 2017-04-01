@@ -9,9 +9,9 @@ class TableView: UITableView {
     super.init(frame: frame, style: style)
 
     tableFooterView = UIView()
-    backgroundColor = .grayColor()
-    layoutMargins = UIEdgeInsetsZero
-    separatorInset = UIEdgeInsetsZero
+    backgroundColor = .gray
+    layoutMargins = UIEdgeInsets.zero
+    separatorInset = UIEdgeInsets.zero
 
     rowHeight = frame.height/10.0
   }

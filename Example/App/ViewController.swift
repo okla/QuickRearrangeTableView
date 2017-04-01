@@ -2,12 +2,12 @@ import UIKit
 
 class ViewController: UIViewController {
 
-  var currentIndexPath: NSIndexPath?
+  var currentIndexPath: IndexPath?
 
   var cellTitles = ["0x15", "0x2", "0x3", "0x4", "0x5", "0x6", "0x7", "0x8", "0x9", "0xA", "0xB",
                     "0xC", "0xD", "0xE", "0xF", "0x10", "0x11", "0x12", "0x13", "0x14", "0x1"]
 
-  override func prefersStatusBarHidden() -> Bool {
+  override var prefersStatusBarHidden : Bool {
 
     return true
   }
@@ -16,7 +16,7 @@ class ViewController: UIViewController {
 
     super.viewDidLoad()
 
-    let tableView = TableView(frame: view.frame, style: .Plain)
+    let tableView = TableView(frame: view.frame, style: .plain)
 
     tableView.delegate = self
     tableView.dataSource = self
@@ -28,22 +28,22 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
 
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    tableView.deselectRow(at: indexPath, animated: true)
   }
 }
 
 extension ViewController: UITableViewDataSource {
 
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
     return cellTitles.count
   }
 
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-    let cell = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
     if indexPath == currentIndexPath {
 
@@ -54,8 +54,8 @@ extension ViewController: UITableViewDataSource {
       cell.textLabel?.text = cellTitles[indexPath.row]
     }
 
-    cell.separatorInset = UIEdgeInsetsZero
-    cell.layoutMargins = UIEdgeInsetsZero
+    cell.separatorInset = UIEdgeInsets.zero
+    cell.layoutMargins = UIEdgeInsets.zero
     
     return cell
   }
@@ -63,13 +63,13 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: RearrangeDataSource {
 
-  func moveObjectAtCurrentIndexPath(to indexPath: NSIndexPath) {
+  func moveObjectAtCurrentIndexPath(to indexPath: IndexPath) {
 
     guard let unwrappedCurrentIndexPath = currentIndexPath else { return }
 
     let object = cellTitles[unwrappedCurrentIndexPath.row]
 
-    cellTitles.removeAtIndex(unwrappedCurrentIndexPath.row)
-    cellTitles.insert(object, atIndex: indexPath.row)
+    cellTitles.remove(at: unwrappedCurrentIndexPath.row)
+    cellTitles.insert(object, at: indexPath.row)
   }
 }
